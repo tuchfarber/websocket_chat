@@ -11,7 +11,6 @@ async def communication_handler(websocket, path):
         try:
             message = await websocket.recv()
             new_message = "<b>{}:</b> {}".format(name, message)
-            print(clients)
             for client in clients:
                 await client.send(new_message)
         except:
