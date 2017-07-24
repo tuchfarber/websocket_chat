@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            html,body{
+                height:100%;
+                width:100%;
+            }
+            #chat{
+                height:500px;
+                width:500px;
+                border:1px solid black;
+                overflow-y:scroll;
+                margin:auto;
+            }
+            #message_input{
+                height:30px;
+                width:490px;
+                padding-left:10px;
+                display:block;
+                margin:30px auto;
+            }
+        </style>
+    </head>
+    <body>
+        <input id="message_input" placeholder="Enter name"></input>
+        <div id="chat"></div>
+
+        <script>
+            var chat_window = document.getElementById("chat");
+            var message_input = document.getElementById("message_input");
+            var ws = new WebSocket("ws://127.0.0.1:5678");
+
+            // Add new messages to message view
+            ws.onmessage = function(message){
+                chat_window.innerHTML += ('<p>' + message.data + '</p>')
+                chat_window.scrollTop = chat_window.scrollHeight;
+            }
+
+            // Send messages on Enter
+            message_input.onkeyup = function(event){
+                if (event.keyCode == 13) {
+                    if(message_input.placeholder == "Enter name"){
+                        message_input.placeholder = "Enter message";
+                    }
+                    ws.send(message_input.value);
+                    message_input.value = "";
+                }
+            }
+        </script>
+    </body>
+</html>
