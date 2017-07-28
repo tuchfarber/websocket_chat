@@ -1,5 +1,6 @@
 import websockets
 import asyncio
+import html
 
 async def communication_handler(websocket, path):
     name = await websocket.recv()
@@ -10,6 +11,7 @@ async def communication_handler(websocket, path):
     while True:
         try:
             message = await websocket.recv()
+            message = html.escape(message)
             new_message = "<b>{}:</b> {}".format(name, message)
             for client in clients:
                 await client.send(new_message)
